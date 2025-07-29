@@ -20,4 +20,19 @@ async function handleGenerateNewShortURL(req, res) {
     });
 }
 
-module.exports = { handleGenerateNewShortURL }
+async function handleGetAnalytics(req, res) {
+    const shortId = req.params.shortId;
+
+    const result = await URL.findOne({ shortId });
+
+    if (!result) {
+        return res.status(404).json({ error: "not found" });
+    }
+
+    return res.status(200).json({
+        totalClicks: result.visitHistory.length,
+        visitHistory: result.visitHistory
+    });
+}
+
+module.exports = { handleGenerateNewShortURL, handleGetAnalytics }
