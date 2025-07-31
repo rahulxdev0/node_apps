@@ -14,9 +14,17 @@ async function handleGenerateNewShortURL(req, res) {
         visitHistory: []
     });
 
-    return res.status(201).json({
+    // return res.status(201).json({
+    //     shortId: id,
+    //     redirectUrl: body.url
+    // });
+    
+    const urlsData = await URL.find({});
+
+    return res.render('home', {
         shortId: id,
-        redirectUrl: body.url
+        redirectUrl: body.url,
+        urlsData
     });
 }
 

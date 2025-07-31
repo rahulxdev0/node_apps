@@ -3,10 +3,122 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>URL Shortener</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 40px;
+        }
+        form {
+            margin-top: 20px;
+        }
+        input[type="url"] {
+            padding: 10px;
+            width: 300px;
+            font-size: 16px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: black;
+            color: white;
+            border: none;
+            margin-left: 10px;
+        }
+        .urls-section {
+            margin-top: 40px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .short-url {
+            color: #007bff;
+            text-decoration: none;
+        }
+        .short-url:hover {
+            text-decoration: underline;
+        }
+        .original-url {
+            max-width: 300px;
+            word-break: break-all;
+        }
+        .visit-count {
+            text-align: center;
+            font-weight: bold;
+        }
+        .created-date {
+            font-size: 14px;
+            color: #666;
+        }
+    </style>
 </head>
 <body>
-    <h1>Hello, EJS!</h1>
-    <p>This is a simple EJS template.</p>
+    <h1>URL Shortener</h1>
+    <p>Create and manage your shortened URLs</p>
+
+    <form action="/url" method="POST">
+        <input 
+            type="url" 
+            name="url" 
+            placeholder="https://example.com" 
+            required
+        />
+        <button type="submit">Generate</button>
+    </form>
+
+    <div class="urls-section">
+        <h2>Your Shortened URLs</h2>
+        <% if (urlsData && urlsData.length > 0) { %>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Short URL</th>
+                        <th>Original URL</th>
+                        <th>Visits</th>
+                        <th>Created</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% urlsData.forEach(url => { %>
+                        <tr>
+                            <td>
+                                <a href="/<%= url.shortId %>" class="short-url" target="_blank">
+                                    <%= url.shortId %>
+                                </a>
+                            </td>
+                            <td class="original-url">
+                                <a href="<%= url.redirectUrl %>" target="_blank">
+                                    <%= url.redirectUrl %>
+                                </a>
+                            </td>
+                            <td class="visit-count">
+                                <%= url.visitHistory ? url.visitHistory.length : 0 %>
+                            </td>
+                            <td class="created-date">
+                                <%= new Date(url.createdAt).toLocaleDateString() %>
+                            </td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+        <% } else { %>
+            <p>No URLs created yet. Create your first shortened URL above!</p>
+        <% } %>
+    </div>
 </body>
 </html>

@@ -1,5 +1,6 @@
 const express = require("express");
 const { connectDB } = require("./connect");
+const path = require("path");
 const urlRoute = require("./routes/url");
 const staticRoute = require("./routes/staticRouter")
 const URL = require("./models/url");
@@ -8,7 +9,10 @@ const app = express();
 const PORT = process.env.PORT || 8000;
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+
 app.set("view engine", "ejs");
+app.set("views", path.resolve("./views"));
 
 async function startServer() {
   try {
